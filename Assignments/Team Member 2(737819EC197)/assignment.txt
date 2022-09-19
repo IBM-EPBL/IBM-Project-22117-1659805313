@@ -1,0 +1,55 @@
+TINKER CAD LINK :
+https://www.tinkercad.com/things/1WRT3bRX6RR-daring-amur-hango/editel?sharecode=xgd9DK190rcfISHvpEGUANx8uhOWqv57CQnXccaoB3M
+
+
+
+CODE FOR THE CIRCUIT:
+
+#include <Servo.h>
+Servo myservo;
+void setup()
+{
+  pinMode(12, OUTPUT);
+  myservo.attach(7);
+  pinMode(A0,INPUT);
+  pinMode(4,OUTPUT);
+  pinMode(2,INPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  int door=digitalRead(2);
+  if(door)
+  {
+    digitalWrite(12,HIGH);
+    digitalWrite(4,HIGH);
+    Serial.print("DOOR IS OPENED ;");
+  }
+  else
+  {
+    digitalWrite(12,LOW);
+    digitalWrite(4,LOW);
+     Serial.print("DOOR IS CLOSED ;");
+  }
+  float temp=analogRead(A0);
+  float mv = ( temp/1024.0)*5000;
+  float cel = mv/10;
+  float t = (cel*9)/5 + 32;
+  if(t>120)
+  {
+    for (int pos = 0; pos <= 180; pos += 1) 
+    { 
+    myservo.write(pos);              
+    delay(10);                       
+    }
+    for (int pos = 180; pos >= 0; pos -= 1) 
+    { 
+    myservo.write(pos);              
+    delay(10);                       
+    }
+  }
+    Serial.print("temperature is ");
+    Serial.println(t);
+  delay(500);
+}
